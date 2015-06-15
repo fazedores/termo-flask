@@ -1,0 +1,74 @@
+﻿<!doctype html>
+
+<html>
+    <head>
+        <title>Termômetro</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <style>
+            body {
+                text-align: center;
+            }
+      
+            #termo {
+                width:400px; height:320px;
+                display: inline-block;
+                margin: 1em;
+            }
+      
+            p {
+                display: block;
+                width: 450px;
+                margin: 2em auto;
+                text-align: center;
+            }
+    </style>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="/static/js/raphael.2.1.0.min.js"></script>
+    <script src="/static/js/justgage.1.0.1.min.js"></script>
+    <script>
+        var termo;
+        $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+      
+        window.onload = function() {
+            var termo = new JustGage({
+                id: "termo",
+                value: update_value(),
+                min: -50,
+                max: 150,
+                title: "Termômetro",
+                label: "ºC",
+                gaugeWidthScale: 0.5,
+                shadowOpacity: 1,
+                shadowSize: 0,
+                shadowVerticalOffset: 5,
+                levelColorsGradient: false
+            });
+        function update_value(){
+            $.getJSON($SCRIPT_ROOT + "/data",
+                function (data) {
+                    termo.refresh(data.temperature);
+                });
+            };
+        setInterval(update_value, 1000);
+        };
+    </script>
+    </head>
+
+    <body>
+        <a href="http://www.fazedores.com/"><img
+        src="/static/img/fazedores.png"
+        border="0"
+        alt="presented by Fazedores"
+        title="apresentado por Fazedores"></a><br />
+        <div id="termo">
+        </div>
+        <p>
+            Placa Teensy em {{ teensy_port }} + LM35.
+        </p>
+        <a href="http://flask.pocoo.org/"><img
+        src="http://flask.pocoo.org/static/badges/made-with-flask-s.png"
+        border="0"
+        alt="made with Flask"
+        title="feito com Flask"></a>
+     </body>
+</html>
