@@ -8,53 +8,56 @@
             body {
                 text-align: center;
             }
-      
+
             #termo {
                 width:400px; height:320px;
                 display: inline-block;
                 margin: 1em;
             }
-      
+
             p {
                 display: block;
                 width: 450px;
                 margin: 2em auto;
                 text-align: center;
             }
-    </style>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script src="/static/js/raphael.2.1.0.min.js"></script>
-    <script src="/static/js/justgage.1.0.1.min.js"></script>
-    <script>
-        var termo;
-        $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
-      
-        window.onload = function() {
-            var termo = new JustGage({
-                id: "termo",
-                value: update_value(),
-                min: -50,
-                max: 150,
-                title: "Termômetro",
-                label: "ºC",
-                gaugeWidthScale: 0.5,
-                shadowOpacity: 1,
-                shadowSize: 0,
-                shadowVerticalOffset: 5,
-                levelColorsGradient: false
-            });
-        function update_value(){
-            $.getJSON($SCRIPT_ROOT + "/data",
-                function (data) {
-                    termo.refresh(data.temperature);
+        </style>
+        <!-- The code below configures the gauge to show the updated temperature. -->
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script src="/static/js/raphael.2.1.0.min.js"></script>
+        <script src="/static/js/justgage.1.0.1.min.js"></script>
+        <script>
+            var termo;
+            $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+
+            window.onload = function() {
+                var termo = new JustGage({
+                    id: "termo",
+                    value: update_value(), // Update the temperature.
+                    min: -50,
+                    max: 150,
+                    title: "Termômetro",
+                    label: "ºC",
+                    gaugeWidthScale: 0.5,
+                    shadowOpacity: 1,
+                    shadowSize: 0,
+                    shadowVerticalOffset: 5,
+                    levelColorsGradient: false
                 });
+                function update_value(){
+                    // Writes a JSON with the temperature on */data and sends to justGage.
+                    $.getJSON($SCRIPT_ROOT + "/data",
+                    function (data) {
+                        termo.refresh(data.temperature);
+                    });
+                };
+                setInterval(update_value, 1000); // Updates temperature every second.
             };
-        setInterval(update_value, 1000);
-        };
     </script>
     </head>
 
     <body>
+        <!-- Renders the presentation. -->
         <a href="http://www.fazedores.com/"><img
         src="/static/img/fazedores.png"
         border="0"

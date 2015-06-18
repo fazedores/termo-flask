@@ -6,6 +6,7 @@ from serial.tools import list_ports
 import time
 
 class TeensySerial:
+    """Handle the Teensy 2 serial connection on Linux."""
     def __init__(self, baudrate):
         self.teensy_port = self.find_teensy2_linux()
         if self.teensy_port:
@@ -14,6 +15,7 @@ class TeensySerial:
             self.teensy = None
 
     def find_teensy2_linux(self):
+        """Find where the Teensy 2 board is connected and return the port."""
         if sys.platform.startswith("linux"):
             ports_avaiable = list(list_ports.grep("/dev/ttyACM.*"))
             teensy_ports = list()
@@ -27,18 +29,18 @@ class TeensySerial:
                     return teensy_ports[0]
 
     def get_port(self):
+        """Return the port where Teensy 2 is connected."""
         try:
             return self.teensy_port[0]
         except TypeError:
             return None
 
-    #def send(self, data):
-    #    self.teensy.write(data)
-
     def recv(self):
+        """Receives the data from serial."""
         self.teensy.flushInput()
         return self.teensy.read(5)
 
     def finish(self):
+        """Terminate the serial connection."""
         if self.teensy.isOpen():
             self.teensy.close()
