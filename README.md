@@ -1,6 +1,6 @@
 ![Logo Fazedores](https://github.com/fazedores/termo-flask/blob/master/static/img/fazedores.png)
 
-## Índice
+## TermoFlask
 - [Apresentação](#apresentação)
 - [Artigo](#artigo)
 - [Licença](#licença)
