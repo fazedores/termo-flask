@@ -9,8 +9,7 @@ void setup()
 
 void loop()
 {
-	Serial.print((analogRead(temp) * 500.0) / 1024);
+	Serial.print((analogRead(temp) * 500.0) / 1023);
 	Serial.println();
 	delay(1000);
 }
-
